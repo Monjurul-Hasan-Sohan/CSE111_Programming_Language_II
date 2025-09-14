@@ -1,0 +1,305 @@
+//task1
+package task1;
+
+public class Product {
+    private String name;
+    private double price;
+    private int quantity;
+
+    private static final String DEFAULT_NAME = "Unknown";
+    private static final double DEFAULT_PRICE = 0.0;
+
+    public Product() {
+        this.name = DEFAULT_NAME;
+        this.price = DEFAULT_PRICE;
+        this.quantity = 0;
+    }
+
+    public Product(String name, double price) {
+        this.name = normalizeName(name);
+        this.price = price < 0 ? 0.0 : price;
+        this.quantity = 0;
+    }
+
+    public String getName()     { return name; }
+    public double getPrice()    { return price; }
+    public int getQuantity()    { return quantity; }
+
+    public void setName(String name) {
+        this.name = normalizeName(name);
+    }
+
+    public void setPrice(double price) {
+        this.price = Math.max(0.0, price);
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = Math.max(0, quantity);
+    }
+
+    public void displayInfo() {
+        System.out.println("Product Name: " + name);
+        System.out.println("Price: $" + price);
+    }
+
+    public void displayInfo(boolean showQuantity) {
+        displayInfo();
+        if (showQuantity) {
+            System.out.println("Quantity: " + quantity);
+        }
+    }
+
+    private String normalizeName(String n) {
+        if (n == null) return DEFAULT_NAME;
+        String cleaned = n.strip();
+        return cleaned.isEmpty() ? DEFAULT_NAME : cleaned;
+    }
+}
+
+
+//task2
+package task2;
+
+public class Company {
+    private static final String COMPANY_NAME = "ABC Company";
+    private static final int CAPACITY = 3;
+
+    private final Employee[] slots = new Employee[CAPACITY];
+    private int count = 0;
+
+    public Company() { }
+
+    public void addEmployee(Employee e) {
+        if (e == null) return;
+
+        for (Employee x : slots) {
+            if (x == e || (x != null && x.getId() == e.getId())) return;
+        }
+
+        for (int i = 0; i < CAPACITY; i++) {
+            if (slots[i] == null) {
+                slots[i] = e;
+                count++;
+                System.out.println(e.getName() + " has joined the company");
+                return;
+            }
+        }
+        System.out.println("No more vacancy");
+    }
+
+    public void removeEmployee(Employee e) {
+        if (e == null) return;
+        for (int i = 0; i < CAPACITY; i++) {
+            Employee x = slots[i];
+            if (x == e || (x != null && x.getId() == e.getId())) {
+                System.out.println(x.getName() + " has left the company");
+                slots[i] = null;
+                count--;
+                return;
+            }
+        }
+    }
+
+    public void details() {
+        System.out.println("Company Name: " + COMPANY_NAME);
+        System.out.println("Total Employee: " + count);
+
+        System.out.println("Fulltime Employees:");
+        printGroup("Fulltime");
+
+        System.out.println("Part-Time Employees:");
+        printGroup("Part-time");
+    }
+
+    private void printGroup(String wanted) {
+        for (Employee e : slots) {
+            if (e != null && e.getType().equals(wanted)) {
+                System.out.println("Name: " + e.getName() + ", ID: " + e.getId());
+            }
+        }
+    }
+}
+
+package task2;
+
+public class Employee {
+    private String name;
+    private int id;
+    private String type;
+
+    private static final String DEFAULT_NAME = "Unknown";
+    private static final int DEFAULT_ID = 0;
+    private static final String DEFAULT_TYPE = "Fulltime";
+
+    public Employee() {
+        System.out.println("A default employee has been created");
+        this.name = DEFAULT_NAME;
+        this.id = DEFAULT_ID;
+        this.type = DEFAULT_TYPE;
+    }
+
+    public Employee(String name, int id, String type) {
+        this.name = sanitizeName(name);
+        this.id = id;
+        this.type = normalizeType(type);
+    }
+
+    public String getName() { return name; }
+    public int getId() { return id; }
+    public String getType() { return type; }
+
+    private String sanitizeName(String n) {
+        if (n == null) return DEFAULT_NAME;
+        String t = n.trim();
+        return t.isEmpty() ? DEFAULT_NAME : t;
+    }
+
+    private String normalizeType(String t) {
+        if (t == null) return DEFAULT_TYPE;
+        String s = t.trim().toLowerCase();
+        if (s.equals("fulltime") || s.equals("full-time")) return "Fulltime";
+        return "Part-time";
+    }
+}
+
+
+//task3
+package task3;
+
+public class Department {
+  private String name;
+  private Student[] list = new Student[5];
+  private int count = 0;
+
+  public Department(String n) {
+    name = n;
+  }
+
+  public void addStudent(Student a, Student b, Student c) {
+    addStudent(a);
+    addStudent(b);
+    addStudent(c);
+  }
+
+  public void addStudent(Student s) {
+    if (s == null) return;
+    int i;
+    for (i = 0; i < count; i++) {
+      if (list[i].getId() == s.getId()) {
+        System.out.println("Student with the same ID already exists, Please try with another ID");
+        return;
+      }
+    }
+    if (count >= list.length) return;
+    list[count] = s;
+    count++;
+    System.out.println("Welcome to " + name + " department, " + s.getName());
+  }
+
+  public void findStudent(int id) {
+    if (id <= 0) {
+      System.out.println("Student with this ID doesn't exist, Please give a valid ID");
+      return;
+    }
+    int i;
+    for (i = 0; i < count; i++) {
+      if (list[i].getId() == id) {
+        System.out.println("Student info:");
+        System.out.println("Student Name: " + list[i].getName());
+        System.out.println("ID: " + list[i].getId());
+        System.out.println("CGPA: " + list[i].getCgpa());
+        return;
+      }
+    }
+    System.out.println("Student with this ID doesn't exist, Please give a valid ID");
+  }
+
+  public void details() {
+    System.out.println("Department Name: " + name);
+    System.out.println("Number of student:" + count);
+    System.out.println("Details of the students:");
+    int i;
+    for (i = 0; i < count; i++) {
+      System.out.println("Student name: " + list[i].getName() + ", ID: " + list[i].getId() + ", cgpa: " + list[i].getCgpa());
+    }
+  }
+}
+
+package task3;
+
+public class Student {
+  private String name;
+  private int id;
+  private double cgpa;
+
+  public Student(String n, int i, double c) {
+    name = n;
+    id = i;
+    cgpa = c;
+  }
+
+  public String getName() { return name; }
+  public int getId() { return id; }
+  public double getCgpa() { return cgpa; }
+  public void setId(int i) { id = i; }
+}
+
+
+//task4
+package task4;
+
+public class Cargo {
+  private String name;
+  private int weight;
+
+  public Cargo(String n, int w) {
+    name = n;
+    weight = w;
+  }
+
+  public String getName() { return name; }
+  public int getWeight() { return weight; }
+}
+
+package task4;
+
+public class Spaceship {
+  private String name;
+  private int capacity;
+  private Cargo[] cargos = new Cargo[100];
+  private int count = 0;
+  private int current = 0;
+
+  public Spaceship(String n, int c) {
+    name = n;
+    capacity = c;
+  }
+
+  public void loadCargo(Cargo c) {
+    if (c == null) return;
+    int after = current + c.getWeight();
+    if (after > capacity) {
+      System.out.println("Warning: Unable to load " + c.getName() + " inside " + name + ". Exceeds capacity by " + (after - capacity) + ".");
+      return;
+    }
+    if (count >= cargos.length) return;
+    cargos[count] = c;
+    count++;
+    current = after;
+  }
+
+  public void displayDetails() {
+    System.out.println("Spaceship Name: " + name);
+    System.out.println("Capacity: " + capacity);
+    System.out.println("Current Cargo Weight: " + current);
+    String s = "";
+    int i;
+    for (i = 0; i < count; i++) {
+      if (i > 0) s = s + " ";
+      s = s + cargos[i].getName();
+    }
+    System.out.println("Cargo:" + s);
+  }
+}
+
+

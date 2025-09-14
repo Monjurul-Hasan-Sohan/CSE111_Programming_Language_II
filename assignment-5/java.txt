@@ -1,0 +1,160 @@
+public class Song {
+    String title;
+    String artist;
+    int length; //TIME
+    Song next;
+
+    public Song(String title, String artist, int length) {
+        this.title = title;
+        this.artist = artist;
+        this.length = length;
+        this.next = null;
+    }
+
+    public void songInfo() {
+        System.out.println("Title: " + title + ",  Artist: " + artist);
+        System.out.println("Length: " + length + " minutes");
+    }
+}
+
+
+
+
+
+public class Playlist {
+    String name;
+    Song start;
+
+    public Playlist(String name) {
+        this.name = name;
+        this.start = null;
+        System.out.println(name + " created.");
+    }
+        public void info() {
+        System.out.println(name + " has the following");
+        System.out.println("songs:");
+        if (start == null) {
+            System.out.println("No songs in " + name + ".");
+            return;
+        }
+        Song cur = start;
+        int idx = 1;
+        while (cur != null) {
+            System.out.println("Song-" + idx);
+            cur.songInfo();
+            cur = cur.next;
+            idx++;
+        }
+    }
+
+
+    public void addSong(Song s) {
+        if (start == null) {
+            start = s;
+        } else {
+            Song cur = start;
+            while (cur.next != null) {
+                cur = cur.next;
+            }
+            cur.next = s;
+        }
+        s.next = null;
+        System.out.println(s.title + " added to " + name + ".");
+    }
+
+
+    public void addSong(Song s, boolean atStart) {
+        if (atStart) {
+            s.next = start;
+            start = s;
+            System.out.println(s.title + " added to " + name + ".");
+        } else {
+            addSong(s);
+        }
+    }
+
+
+
+    //task6
+    public void playSong(String title) {
+        Song cur = start;
+        while (cur != null) {
+            if (cur.title.equals(title)) {
+                System.out.println("Playing " + cur.title + " by " + cur.artist + ".");
+                return;
+            }
+            cur = cur.next;
+        }
+        System.out.println(title + " not found in " + name + ".");
+    }
+
+    //task7
+    public void playSong(int index) {
+        int i = 0;
+        Song cur = start;
+        while (cur != null && i < index) {
+            cur = cur.next;
+            i++;
+        }
+        if (cur == null) {
+            System.out.println("Song at Index " + index + " not found in " + name + " Playlist.");
+        } else {
+            System.out.println("Playing " + cur.title + " by " + cur.artist + ".");
+        }
+    }
+
+    //task8
+    public void deleteSong() {
+        if (start == null) return;
+        if (start.next == null) {
+            System.out.println(start.title + " deleted from " + name + " Playlist");
+            start = null;
+            return;
+        }
+        Song prev = start;
+        while (prev.next.next != null) {
+            prev = prev.next;
+        }
+        System.out.println(prev.next.title + " deleted from " + name + " Playlist");
+        prev.next = null;
+    }
+
+    public void deleteSong(boolean fromStart) {
+        if (start == null) return;
+        if (fromStart) {
+            start = start.next;
+            System.out.println("First Song Deleted!");
+        } else {
+            deleteSong();
+        }
+    }
+
+    //task9
+    public int totalSong() {
+        int count = 0;
+        Song cur = start;
+        while (cur != null) {
+            count++;
+            cur = cur.next;
+        }
+        return count;
+    }
+
+    //task10
+    public void merge(Playlist other) {
+        if (other == null || other.start == null) {
+            System.out.println("Merge Completed!");
+            return;
+        }
+        if (this.start == null) {
+            this.start = other.start;
+        } else {
+            Song tail = this.start;
+            while (tail.next != null) {
+                tail = tail.next;
+            }
+            tail.next = other.start;
+        }
+        System.out.println("Merge Completed!");
+    }
+}

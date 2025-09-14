@@ -1,0 +1,293 @@
+//task1
+
+class Employee {
+    public String name;
+    private double baseSalary;
+    private int hoursWorked;
+
+    public Employee(String name, double baseSalary, int hoursWorked){
+        this.name = name;
+        this.baseSalary = baseSalary;
+        this.hoursWorked = hoursWorked;
+    }
+    public double getBaseSalary() 
+    {
+         return baseSalary; 
+    }
+    public void setBaseSalary(double baseSalary)
+    {
+        this.baseSalary = baseSalary;
+    }
+    public int getHoursWorked() 
+    {
+        return hoursWorked;
+    }
+    public void setHoursWorked(int hoursWorked)
+    {
+        this.hoursWorked = hoursWorked;
+    }
+
+    public void displayInfo() {
+        System.out.println("Name: " + name);
+        System.out.println("Base Salary: $" + baseSalary);
+        System.out.println("Work Hours: " + hoursWorked);
+    }
+}
+
+class Manager extends Employee {
+    private double bonusPercent;
+    private double finalSalary;
+
+    public Manager(String name, double baseSalary, int hoursWorked, double bonusPercent){
+        super(name, baseSalary, hoursWorked);
+        this.bonusPercent = bonusPercent;
+    }
+
+    public void calculateSalary() {
+        double base = getBaseSalary();
+        if (getHoursWorked() > 40) {
+            finalSalary = base + (base * bonusPercent / 100.0);
+        } else {
+            finalSalary = base;
+        }
+    }
+
+    public void requestIncrement(double amount) {
+        if (getHoursWorked() > 100) {
+            setBaseSalary(getBaseSalary() + amount);
+            System.out.println("$" + (int)amount + " Increment approved.");
+        } else if (getHoursWorked() > 80) {
+            double half = amount / 2.0;
+            setBaseSalary(getBaseSalary() + half);
+            System.out.println("$" + (int)half + " Increment approved.");
+        } else {
+            System.out.println("Increment denied.");
+        }
+    }
+
+    @Override
+    public void displayInfo() {
+        super.displayInfo();
+        System.out.println("Bonus: " + bonusPercent + " %");
+        System.out.println("Final Salary: $" + finalSalary);
+    }
+}
+
+class Developer extends Employee {
+    private String language;
+    private double finalSalary;
+
+    public Developer(String name, double baseSalary, int hoursWorked, String language){
+        super(name, baseSalary, hoursWorked);
+        this.language = language;
+    }
+
+    public void calculateSalary() {
+        finalSalary = getBaseSalary();
+        if ("Java".equals(language)) {
+            finalSalary += 700;
+        }
+    }
+
+    @Override
+    public void displayInfo() {
+        super.displayInfo();
+        System.out.println("Language: " + language);
+        System.out.println("Final Salary: $" + finalSalary);
+    }
+}
+
+public class EmployeeTester {
+    public static void main(String[] args) {
+        Manager neymar = new Manager("Neymar", 1000, 45, 10);
+        Developer messi = new Developer("Messi", 1000, 50, "Java");
+        Developer chiesa = new Developer("Chiesa", 1000, 50, "Javascript");
+
+        neymar.calculateSalary();
+        System.out.println("1.=========");
+        neymar.displayInfo();
+
+        System.out.println("2.=========");
+        neymar.requestIncrement(100);
+
+        System.out.println("3.=========");
+        neymar.setHoursWorked(85);
+        neymar.requestIncrement(100);
+
+        System.out.println("4.=========");
+        neymar.calculateSalary();
+
+        System.out.println("5.=========");
+        neymar.displayInfo();
+
+        System.out.println("6.=========");
+        messi.calculateSalary();
+
+        System.out.println("7.=========");
+        messi.displayInfo();
+
+        System.out.println("8.=========");
+        chiesa.calculateSalary();
+
+        System.out.println("9.=========");
+        chiesa.displayInfo();
+    }
+}
+
+
+//task2
+class Tea {
+    public String name;
+    protected int price;
+    protected boolean status;
+
+    public Tea(String name, int price) {
+        this.name = name;
+        this.price = price;
+        this.status = false;
+    }
+
+    public void productDetail() {
+        System.out.println("Name: " + name + ", Price: " + price);
+        System.out.println("Status: " + status);
+    }
+}
+
+class KKTea extends Tea {
+    protected int teaBags;
+    private static int totalSales = 0;
+    private static int regularSold = 0;
+    protected static int flavouredSold = 0;
+
+    public KKTea(int price, int teaBags) {
+        super("KK Regular Tea", price);
+        this.teaBags = teaBags;
+    }
+
+    public static void updateSoldStatusRegular(KKTea t){
+        if (!t.status) {
+            t.status = true;
+            totalSales++;
+            regularSold++;
+        }
+    }
+
+    @Override
+    public void productDetail() {
+        super.productDetail();
+        int weight = teaBags * 2;
+        System.out.println("Weight: " + weight + ", Tea Bags: " + teaBags);
+    }
+
+    public static void totalSales(){
+        System.out.println("Total Sales: " + totalSales);
+        System.out.println("KK Regular Tea: " + regularSold);
+        if (flavouredSold > 0) {
+            System.out.println("KK Flavoured Tea: " + flavouredSold);
+        }
+    }
+
+    protected static void addFlavouredSaleIfNew(KKFlavouredTea t){
+        if (!t.status) {
+            t.status = true;
+            totalSales++;
+            flavouredSold++;
+        }
+    }
+}
+
+class KKFlavouredTea extends KKTea {
+    private String flavour;
+
+    public KKFlavouredTea(String flavour, int price, int teaBags) {
+        super(price, teaBags);
+        this.flavour = flavour;
+        this.name = "KK " + flavour + " Tea";
+    }
+
+    public static void updateSoldStatusFlavoured(KKFlavouredTea t){
+        KKTea.addFlavouredSaleIfNew(t);
+    }
+}
+
+public class TeaTester {
+    public static void main(String[] args) {
+        KKTea t1 = new KKTea(250, 50);
+        System.out.println("--------1--------");
+        t1.productDetail();
+
+        System.out.println("--------2--------");
+        KKTea.totalSales();
+
+        System.out.println("--------3--------");
+        KKTea t2 = new KKTea(470, 100);
+        KKTea.updateSoldStatusRegular(t1);
+        KKTea.updateSoldStatusRegular(t2);
+
+        System.out.println("--------4--------");
+        t2.productDetail();
+
+        System.out.println("--------5--------");
+        KKTea.totalSales();
+
+        System.out.println("--------6--------");
+        KKFlavouredTea t4 = new KKFlavouredTea("Jasmine", 260, 50);
+        KKFlavouredTea t5 = new KKFlavouredTea("Honey Lemon", 270, 45);
+        KKFlavouredTea t6 = new KKFlavouredTea("Honey Lemon", 270, 45);
+
+        System.out.println("--------7--------");
+        t4.productDetail();
+
+        System.out.println("--------8--------");
+        t6.productDetail();
+
+        System.out.println("--------9--------");
+        KKFlavouredTea.updateSoldStatusFlavoured(t4);
+        KKFlavouredTea.updateSoldStatusFlavoured(t5);
+        KKFlavouredTea.updateSoldStatusFlavoured(t6);
+
+        System.out.println("--------10--------");
+        KKTea.totalSales();
+    }
+}
+
+
+//task3
+class Student {
+    public String msg = "I love BU";
+    public String shout() { return msg; }
+}
+
+class CSEStudent extends Student {
+    public String msg = "I want to transfer to CSE";
+    @Override
+    public String shout() { return msg; }
+}
+
+class CSE111Student extends Student {
+    public String msg = "I love Java Programming";
+    @Override
+    public String shout() { return msg; }
+}
+
+public class StudentTester {
+    public static void printShout(Student s){
+        System.out.println("----------------");
+        System.out.println(s.msg);
+        System.out.println(s.shout());
+    }
+    public static void main(String[] args){
+        Student s = new Student();
+        CSEStudent cs = new CSEStudent();
+        CSE111Student cs111 = new CSE111Student();
+
+        System.out.println(s.msg);
+        System.out.println(cs.msg);
+        System.out.println(cs111.msg);
+
+        printShout(s);
+        printShout(cs);
+        printShout(cs111);
+    }
+}
+
