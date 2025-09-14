@@ -1,0 +1,248 @@
+//Task 1
+
+import java.util.Scanner;
+
+public class task1{
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+
+        System.out.print("Enter first number: ");
+        int n1 = input.nextInt();
+
+        System.out.print("Enter 2nd number: ");
+        int n2 = input.nextInt();
+
+        int start;
+        int end;
+
+        if (n1 < n2) {
+            start = n1;
+            end = n2;
+        } else {
+            start = n2;
+            end = n1;
+        }
+
+        int count = 0;
+
+        for (int num = start; num <= end; num++) {
+            if (checkPrime(num)) {
+                count++;
+            }
+        }
+
+        System.out.println("Between " + start + " and " + end + ", there are " + count + " prime numbers.");
+    }
+    
+    static boolean checkPrime(int number) {
+        if (number <= 1) {
+            return false;
+        }
+
+        boolean isPrime = true;
+
+        for (int i = 2; i < number; i++) {
+            if (number % i == 0) {
+                isPrime = false;
+                break;
+            }
+        }
+
+        return isPrime;
+    }
+}
+
+
+
+//task2
+
+import java.util.Scanner;
+
+public class task2 {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter a string in small letters: ");
+        String input = scanner.nextLine();
+
+        String result = "";
+
+        for (int i = 0; i < input.length(); i++) {
+            char currentCh = input.charAt(i);
+
+            if (currentCh == 'a') {
+                result = result + 'z';
+            } else {
+                char newCh = (char) (currentCh - 1);
+                result = result + newCh;
+            }
+        }
+
+        System.out.println("Previous alphabets: " + result);
+    }
+}
+
+
+
+//task3
+
+
+import java.util.Scanner;
+
+public class task3 {
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+
+        System.out.print("Enter the length of the array: ");
+        int length = input.nextInt();
+
+        int[] numbers = new int[length];
+
+
+        for (int i = 0; i < length; i++) {
+            numbers[i] = input.nextInt();
+        }
+
+        for (int i = 0; i < length / 2; i++) {
+            int temp = numbers[i];
+            numbers[i] = numbers[length - 1 - i];
+            numbers[length - 1 - i] = temp;
+        }
+
+        for (int i = 0; i < length; i++) {
+            System.out.print(numbers[i] + " ");
+        }
+    }
+}
+
+
+
+//task4
+import java.util.Scanner;
+
+public class task4 {
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+
+        System.out.print("Enter how many numbers: ");
+        int n = input.nextInt();
+
+        int[] amarArray = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            amarArray[i] = input.nextInt();
+        }
+
+        System.out.println("Number counts:");
+
+        for (int i = 0; i < n; i++) {
+            boolean alreadyDekha = false;
+
+            for (int j = 0; j < i; j++) {
+                if (amarArray[i] == amarArray[j]) {
+                    alreadyDekha = true;
+                    break;
+                }
+            }
+
+            if (!alreadyDekha) {
+                int count = 1;
+
+                for (int k = i + 1; k < n; k++) {
+                    if (amarArray[i] == amarArray[k]) {
+                        count++;
+                    }
+                }
+
+                System.out.println(amarArray[i] + " - " + count + " times");
+            }
+        }
+    }
+}
+
+
+
+//task5
+import java.util.Scanner;
+
+public class task5 {
+    public static void main(String[] args) {
+        Scanner input = new Scanner(System.in);
+
+        int[][] amarMap = {
+            {0, 0, 10, 0, -1},
+            {0, -1, 0, 0, -1},
+            {-1, 0, -1, 0, 0},
+            {0, -1, 7, 0, -1},
+            {0, -1, 0, -1, 0}
+        };
+
+        int playerRow = 3;
+        int playerCol = 2;
+
+        System.out.println("Shuru Map:");
+        mapDekhao(amarMap);
+
+        boolean paboTreasure = false;
+
+        for (int chesta = 1; chesta <= 5; chesta++) {
+            System.out.print("Move dao " + chesta + ": ");
+            String direction = input.next().toUpperCase();
+
+            int notunRow = playerRow;
+            int notunCol = playerCol;
+
+            if (direction.equals("UP")) {
+                notunRow--;
+            } else if (direction.equals("DOWN")) {
+                notunRow++;
+            } else if (direction.equals("LEFT")) {
+                notunCol--;
+            } else if (direction.equals("RIGHT")) {
+                notunCol++;
+            } else {
+                System.out.println("Vul direction. Abar dao.");
+                chesta--;
+                continue;
+            }
+
+            if (notunRow < 0 || notunRow >= amarMap.length || notunCol < 0 || notunCol >= amarMap[0].length) {
+                System.out.println("Player baire pore gese. Game over!");
+                return;
+            }
+
+            if (amarMap[notunRow][notunCol] == -1) {
+                System.out.println("Mine e porse. Game Over!");
+                return;
+            }
+
+            if (amarMap[notunRow][notunCol] == 10) {
+                amarMap[playerRow][playerCol] = 0;
+                amarMap[notunRow][notunCol] = 7;
+                System.out.println("Treasure peye geso! Tumi jitse! yayyyy!");
+                System.out.println("Shesh Map:");
+                mapDekhao(amarMap);
+                return;
+            }
+
+            amarMap[playerRow][playerCol] = 0;
+            amarMap[notunRow][notunCol] = 7;
+            playerRow = notunRow;
+            playerCol = notunCol;
+
+            System.out.println("Ekhon obostha:");
+            mapDekhao(amarMap);
+        }
+
+        System.out.println("5 bar chance sesh. Tumi hare geso!:\")");
+    }
+
+    public static void mapDekhao(int[][] amarMap) {
+        for (int[] row : amarMap) {
+            for (int cell : row) {
+                System.out.print(cell + " ");
+            }
+            System.out.println();
+        }
+    }
+}

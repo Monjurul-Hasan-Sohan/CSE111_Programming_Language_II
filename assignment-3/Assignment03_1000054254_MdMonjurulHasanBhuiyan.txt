@@ -1,0 +1,184 @@
+//task1
+
+package task1;
+
+public class Shape {
+    private String name;
+    private double param1;
+    private double param2;
+    private double area;
+
+    public void setParameters(String name, int radius) {
+        this.name = name;
+        this.param1 = radius;
+        this.param2 = 0;
+        this.area = Math.PI * radius * radius;
+    }
+
+    public void setParameters(String name, int base, int height) {
+        this.name = name;
+        this.param1 = base;
+        this.param2 = height;
+        this.area = 0.5 * base * height;
+    }
+
+    public void setParameters(String name, double length, double width) {
+        this.name = name;
+        this.param1 = length;
+        this.param2 = width;
+        this.area = length * width;
+    }
+
+    public String details() {
+        if ("Circle".equals(name)) {
+            return "Shape: " + name + "\nArea: " + String.format("%.2f", area);
+        } else if ("Triangle".equals(name)) {
+            return "Shape: " + name + "\nArea: " + String.format("%.2f", area);
+        } else if ("Rectangle".equals(name)) {
+            return "Shape: " + name + "\nArea: " + String.format("%.2f", area);
+        } else {
+            return "Unknown Shape";
+        }
+    }
+}
+
+
+//task2
+
+package task2;
+public class Student {
+    String name = "Not Set";
+    String department = "CSE";
+    double cgpa = 0.0;
+    int credits = 9;
+    String scholarshipStatus = "No scholarship";
+
+    void updateDetails(String name, double cgpa, int credits) {
+        this.name = name;
+        this.cgpa = cgpa;
+        this.credits = credits;
+    }
+
+    void updateDetails(String name, double cgpa, int credits, String department) {
+        this.name = name;
+        this.cgpa = cgpa;
+        this.credits = credits;
+        this.department = department;
+    }
+
+    void updateDetails(String name, double cgpa) {
+        this.name = name;
+        this.cgpa = cgpa;
+    }
+
+    void checkScholarshipEligibility() {
+        if (cgpa >= 3.7) {
+            scholarshipStatus = "Merit based scholarship";
+            System.out.println(name + " is eligible for Merit based scholarship");
+        } else if (cgpa >= 3.5 && cgpa < 3.7 && credits > 10) {
+            scholarshipStatus = "Need based scholarship";
+            System.out.println(name + " is eligible for Need based scholarship");
+        } else {    
+            scholarshipStatus = "No scholarship";
+            System.out.println(name + " is not eligible for scholarship");
+        }
+    }
+
+    void showDetails() {
+        System.out.println("Name: " + name);
+        System.out.println("Department: " + department);
+        System.out.println("CGPA: " + cgpa);
+        System.out.println("Credits: " + credits);
+        System.out.println("Scholarship Status: " + scholarshipStatus);
+    }
+}
+
+
+//task3
+package task3;
+
+class Library {
+    private String[] books;
+    private int capacity;
+    private int count;
+
+    Library() {
+        capacity = 0;
+        count = 0;
+    }
+
+    void setBookCapacity(int cap) {
+        this.capacity = cap;
+        books = new String[cap];
+    }
+
+    void addBook(String bookName) {
+        if (count < capacity) {
+            books[count++] = bookName;
+            System.out.println("Book '" + bookName + "' added to the library");
+        } else {
+            System.out.println("Book '" + bookName + "' added to the library");
+            System.out.println("Exceeds maximum capacity. You can't add more than " + capacity + " books");
+        }
+    }
+
+    void printDetail() {
+        System.out.println("Maximum Capacity: " + capacity);
+        System.out.println("Total Books: " + count);
+        System.out.println("Book list:");
+        for (int i = 0; i < count; i++) {
+            System.out.println(books[i]);
+        }
+    }
+}
+
+
+//task4
+package task4;
+
+class TaxiLagbe {
+    private String taxiID;
+    private String area;
+    private String[] passengerNames;
+    private int[] fares;
+    private int count;
+
+    TaxiLagbe() {
+        passengerNames = new String[4];
+        fares = new int[4];
+        count = 0;
+    }
+
+    void storeInfo(String id, String areaName) {
+        this.taxiID = id;
+        this.area = areaName;
+    }
+
+    void addPassenger(String name, int fare) {
+        if (count < 4) {
+            passengerNames[count] = name;
+            fares[count] = fare;
+            count++;
+            System.out.println("Dear " + name + "! Welcome to TaxiLagbe");
+        } else {
+            System.out.println("Taxi Full! No more passengers can be added");
+        }
+    }
+
+    void printDetails() {
+        System.out.println("Taxi number: " + taxiID);
+        System.out.println("This taxi can cover " + area + " area");
+        System.out.println("Total Passenger: " + count);
+        System.out.println("Passenger Lists:");
+        for (int i = 0; i < count; i++) {
+            System.out.println(passengerNames[i]);
+        }
+
+        int totalFare = 0;
+        for (int i = 0; i < count; i++) {
+            totalFare += fares[i];
+        }
+
+        System.out.println("Total collected fare: " + totalFare + " Taka");
+    }
+}
